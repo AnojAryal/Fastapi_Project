@@ -35,9 +35,10 @@ async def books(skip_book :Optional[str]= None):
 async def read_book(book_name : str):
     return BOOKS[book_name]
 
-@app.get("/book/{book_title}")
-async def read_book(book_title):
-    return {'Book Title': book_title}
+#query parameters
+@app.get("/book_name/")
+async def read_book(book_name: str):
+    return BOOKS[book_name]
 
 
 @app.get("/book_id/{book_id}")
@@ -75,7 +76,8 @@ async def update_book(book_name: str , book_title : str , book_author : str):
     BOOKS[book_name] = book_info
     return book_info
 
-@app.delete('/{book_name}')
-async def delete_book(book_name):
+
+@app.delete("/book_name/")
+async def delete_book(book_name: str):
     del BOOKS[book_name]
-    return f'Book {book_name} deleted successfully.'
+    return BOOKS
