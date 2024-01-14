@@ -21,8 +21,13 @@ class DirectionName(str , Enum):
     east = 'East'
     west = 'West'
 
+#Query Parameters
 @app.get("/")
-async def books():
+async def books(skip_book :Optional[str]= None):
+    if skip_book: 
+        new_books = BOOKS.copy()
+        del new_books[skip_book]
+        return new_books
     return BOOKS
 
 # enhancing path parameters
