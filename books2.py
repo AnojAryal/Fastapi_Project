@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from typing import Optional
+from pydantic import BaseModel, Field
 from uuid import UUID
 
 
@@ -7,14 +8,18 @@ app = FastAPI()
 
 
 class Book(BaseModel):
-    id : UUID
-    title : str
-    author : str
-    description : str
-    rating : int
+    id: UUID
+    title: str = Field(min_length=1)
+    author: str
+    description: Optional[str] = Field(
+        title="Description of the book",
+        max_length=100,
+        min_length=1,
+        default=None
+    )
+    rating: int
 
 BOOKS  = []
-
 
 
 @app.get('/')
