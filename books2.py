@@ -62,6 +62,18 @@ async def create_book(book : Book):
     return book
 
 
+@app.put('/{book_id}')
+async def update_book(book_id : UUID ,book: Book):
+    counter = 0
+
+    for x in BOOKS:
+        counter = 1
+        if x.id == book_id:
+            BOOKS[counter -1]= book
+            return BOOKS[counter -1]
+
+
+
 def create_book_no_api():
     book_1 = Book(id ='90e571fb-6083-4668-9aba-919d59aa878f', 
                 title = 'Title 1', 
