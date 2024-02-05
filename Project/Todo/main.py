@@ -4,12 +4,15 @@ from sqlalchemy.orm import Session
 import models
 from database import engine, SessionLocal
 from pydantic import BaseModel, Field
-from auth import get_current_user, get_user_exception
+from routers.auth import get_current_user, get_user_exception
+from routers import auth
 
 app = FastAPI()
 
 # Create database tables on startup
 models.Base.metadata.create_all(bind=engine)
+
+app.include_router(auth.router)
 
 # Dependency to get a database sessions
 def get_db():
@@ -56,7 +59,7 @@ async def read_todo(todo_id: int,
         .first()
     
     if todo_model is not None:
-        return todo_model
+        return todo_model 
     
     raise http_exception()
 
