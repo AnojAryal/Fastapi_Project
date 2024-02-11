@@ -1,8 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from company import dependencies
 
 router = APIRouter(
     prefix= '/company_api',
     tags= ['company_api'],
+    dependencies=[Depends(dependencies.get_token_header)],
     responses= {418 : {'description': 'Internal Use Only'}}
 )
 
