@@ -39,3 +39,11 @@ async def user_by_path(user_id: int,db: Session = Depends(get_db)):
     if user_model is not None:
         return user_model
     return 'Invalid user id'
+
+
+@router.get('/user/')
+async def user_by_query(user_id: int,db: Session = Depends(get_db)):
+    user_model = db.query(models.Users).filter(models.Users.id ==user_id).first()
+    if user_model is not None:
+        return user_model
+    return 'Invalid user id'
