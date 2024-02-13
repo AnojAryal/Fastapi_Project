@@ -34,8 +34,6 @@ class UserVerification(BaseModel):
     new_password : str
 
 
-
-
 @router.get('/')
 async def read_all(db: Session = Depends(get_db)):
     return db.query(models.Users).all()
@@ -74,4 +72,21 @@ async def user_password_change(user_verification :UserVerification, user : dict 
             db.commit()
             return 'Successful'
     return 'Invalid user or request!'
+
+
+@router.delete('/user')
+async def delete_user(user : dict = Depends(get_current_user), db : Session = Depends(get_db)):
+
+    if user is None:
+        raise get_user_exception()
+    
+    user_model = db.query(models.Users).filter(models.Users.id == user.get('id')).first()
+
+    if user_model is None:
+        return 'Invalid user or request'
+
+    db.query(models.Users).filter(models.Users.id == user.get('id')).delete()
+    db.commit()
+
+    return 'SUccessfully deleted!'
 
