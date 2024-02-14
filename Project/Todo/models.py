@@ -28,4 +28,3 @@ class Todos(Base):
     owner_id = Column(Integer,ForeignKey("users.id"))
 
     owner = relationship('Users', back_populates='todos')
-                                                            

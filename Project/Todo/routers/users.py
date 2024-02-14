@@ -89,4 +89,3 @@ async def delete_user(user : dict = Depends(get_current_user), db : Session = De
     db.commit()
 
     return 'SUccessfully deleted!'
-

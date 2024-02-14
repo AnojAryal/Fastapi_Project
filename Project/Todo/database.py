@@ -8,7 +8,6 @@ from sqlalchemy.ext.declarative import declarative_base
 #     SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False}
 # )
 
-
 SQLALCHEMY_DATABASE_URL = 'postgresql://franzy:fastrack@localhost/todo_database'
 
 engine = create_engine(

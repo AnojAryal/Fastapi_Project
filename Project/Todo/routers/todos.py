@@ -142,6 +142,5 @@ def successful_response(status_code : int):
         'transaction': 'Success'
     }
 
-
 def http_exception():
     return HTTPException(status_code=404, detail=f'Todo not found')
