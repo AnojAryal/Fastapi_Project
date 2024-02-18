@@ -9,4 +9,25 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from .auth import get_current_user, get_user_exception
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/address',
+    tags=['address'],
+    responses={404: {'description' : 'Not found'}}
+)
+
+# Dependency to get a database sessions
+def get_db():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
+
+
+class Address(BaseModel):
+    address1 : str
+    address2 : Optional(str)
+    city : str
+    state : str
+    country : str
+    postalcode : str
