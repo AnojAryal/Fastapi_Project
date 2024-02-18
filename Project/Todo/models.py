@@ -45,4 +45,3 @@ class Address(Base):
     postalcode = Column(string)
 
     user_address = relationship('Users', back_populates='address')
-
