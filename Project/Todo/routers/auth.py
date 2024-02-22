@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi import Depends, HTTPException, status, APIRouter, Request
 from typing import Optional
 from pydantic import BaseModel
 import models
@@ -12,10 +12,15 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 # Algorithm used for JWT token encoding and decoding
 ALGORITHM = "HS256"
+
+templates = Jinja2Templates(directory=('templates'))
 
 
 class CreateUser(BaseModel):
@@ -128,6 +133,18 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     token_expires = timedelta(minutes=20)
     token = create_access_token(user.username, user.id, expires_delta=token_expires)
     return {'Token': token}
+
+
+@router.get('/',response_class= HTMLResponse)
+async def authentication_page(request: Request):
+    return templates.TemplateResponse('login.html', {'request': request})
+
+
+
+@router.get('/register',response_class= HTMLResponse)
+async def register(request: Request):
+    return templates.TemplateResponse('register.html', {'request': request})
+
 
 
 #Exceptions
