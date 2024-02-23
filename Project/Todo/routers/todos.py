@@ -36,7 +36,7 @@ def get_db():
 
 @router.get('/',response_class= HTMLResponse)
 async def read_all_by_user(request: Request):
-    return templates.TemplateResponse('home.html', {'request': request})
+    return templates.TemplateResponse('login.html', {'request': request})
 
 
 @router.get('/add-todo',response_class= HTMLResponse)
