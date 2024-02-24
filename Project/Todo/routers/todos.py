@@ -39,7 +39,7 @@ def get_db():
 @router.get('/',response_class= HTMLResponse)
 async def read_all_by_user(request: Request, db : Session = Depends(get_db)):
 
-    todos = db.query(models.Todos).filter(models.Todos.owner_id == 1).all()
+    todos = db.query(models.Todos).filter(models.Todos.owner_id == 6).all()
     return templates.TemplateResponse('home.html', {'request': request, 'todos': todos})
 
 
@@ -55,8 +55,8 @@ async def create_todo(request: Request, title : str = Form(...), description: st
     todo_model.title = title
     todo_model.description = description
     todo_model.priority = priority
-    todo_model.complete = complete
-    todo_model.owner_id = 1
+    todo_model.complete = False
+    todo_model.owner_id = 6
 
     db.add(todo_model)
     db.commit()
