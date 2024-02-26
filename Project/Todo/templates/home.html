@@ -18,7 +18,8 @@
           </tr>
         </thead>
         <tbody>
-          {% for todo in todos %} {% if todo.complete == False %}
+          {% for todo in todos %} 
+          {% if todo.complete == False %}
           <tr class="pointer">
             <td>{{loop.index}}</td>
             <td id="td1">{{todo.title}}</td>
@@ -62,7 +63,8 @@
             </td>
           </tr>
 
-          {% endif %} {% endfor %}
+          {% endif %} 
+          {% endfor %}
         </tbody>
       </table>
 
