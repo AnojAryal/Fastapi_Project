@@ -1,6 +1,8 @@
 import sys
 sys.path.append("..")
 
+
+
 from fastapi import Depends, HTTPException, status, APIRouter, Request
 from typing import Optional
 from pydantic import BaseModel
@@ -58,6 +60,8 @@ class LoginForm:
         form = await self.request.form()
         self.username = form.get('email')
         self.password = form.get('password')
+
+
 
 
 # Dependency to get a database sessions
@@ -152,12 +156,21 @@ async def authentication_page(request: Request):
     return templates.TemplateResponse('login.html', {'request': request})
 
 
+@router.post('/',response_class= HTMLResponse)
+async def login(request : Request, db: Session = Depends(get_db)):
+    try:
+        form = LoginForm(request)
+        await form.create_oauth_form()
+        response =  RedirectResponse(url='/todos', status_code = status.HTTP_302_FOUND)
+
+
 
 @router.get('/register',response_class= HTMLResponse)
 async def register(request: Request):
     return templates.TemplateResponse('register.html', {'request': request})
 
 
+@router.ppost('/login')
 
 #Exceptions
 def get_user_exception():
