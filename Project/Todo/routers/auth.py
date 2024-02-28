@@ -1,9 +1,10 @@
 import sys
 sys.path.append("..")
 
+from starlette import status
+from starlette.responses import RedirectResponse
 
-
-from fastapi import Depends, HTTPException, status, APIRouter, Request
+from fastapi import Depends, HTTPException, status, APIRouter, Request, Response
 from typing import Optional
 from pydantic import BaseModel
 import models
@@ -141,14 +142,17 @@ async def create_new_user(create_user: CreateUser, db:Session = Depends(get_db))
 
 
 @router.post('/token')
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
+async def login_for_access_token(response: Response , form_data: OAuth2PasswordRequestForm = Depends(),
                                  db:Session = Depends(get_db)):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
-        raise token_exception()
-    token_expires = timedelta(minutes=20)
+        return False
+    token_expires = timedelta(minutes=60)
     token = create_access_token(user.username, user.id, expires_delta=token_expires)
-    return {'Token': token}
+
+    response.set_cookie(key='access_token', value = token, httponly = True)
+
+    return True
 
 
 @router.get('/',response_class= HTMLResponse)
@@ -163,14 +167,22 @@ async def login(request : Request, db: Session = Depends(get_db)):
         await form.create_oauth_form()
         response =  RedirectResponse(url='/todos', status_code = status.HTTP_302_FOUND)
 
+        validate_user_cookie = await login_for_access_token (response= response, form_data=form, db=db)
+
+        if not validate_user_cookie:
+            msg = 'Incorrect username or password!'
+            return templates.TemplateResponse('login.html',{'request': request ,'msg': msg})
+        return response
+    except HTTPException:
+        msg = 'unknown error'
+        return templates.TemplateResponse('login.html',{'request': request ,'msg': msg})
+
 
 
 @router.get('/register',response_class= HTMLResponse)
 async def register(request: Request):
     return templates.TemplateResponse('register.html', {'request': request})
 
-
-@router.ppost('/login')
 
 #Exceptions
 def get_user_exception():
