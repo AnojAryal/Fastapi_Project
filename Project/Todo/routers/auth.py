@@ -195,7 +195,7 @@ async def register(request: Request):
 
 
 @router.post('/register',response_class= HTMLResponse)
-async def register_user(register : Register, email: str = Form(...), username: str = Form(...),
+async def register_user(request : Request, email: str = Form(...), username: str = Form(...),
                         first_name: str = Form(...), last_name: str = Form(...),
                         password: str = Form(...), password2: str = Form(...),
                         db : Session = Depends(get_db)):
@@ -223,7 +223,7 @@ async def register_user(register : Register, email: str = Form(...), username: s
 
     msg = 'User Successfully Created!!'
     return templates.TemplateResponse('login.html', {'request': request , 'msg': msg})
-    
+
 
 #Exceptions
 def get_user_exception():
