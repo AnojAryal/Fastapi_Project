@@ -196,7 +196,7 @@ async def register(request: Request):
 
 @router.post('/register',response_class= HTMLResponse)
 async def register_user(request : Request, email: str = Form(...), username: str = Form(...),
-                        first_name: str = Form(...), last_name: str = Form(...),
+                        firstname: str = Form(...), lastname: str = Form(...),
                         password: str = Form(...), password2: str = Form(...),
                         db : Session = Depends(get_db)):
 
@@ -211,8 +211,8 @@ async def register_user(request : Request, email: str = Form(...), username: str
     user_model = models.Users()
     user_model.username = username
     user_model.email = email
-    user_model.first_name = first_name
-    user_model.last_name  = last_name
+    user_model.first_name = firstname
+    user_model.last_name  = lastname
 
     hash_password = get_password_hash(password)
     user_model.hashed_password = hash_password
