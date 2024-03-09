@@ -52,7 +52,7 @@ async def edit_user_view(request : Request):
 
 
 
-router.post('/edit-password',response_class= HTMLResponse )
+@router.post('/edit-password',response_class= HTMLResponse )
 async def user_password_change(request: Request, username: str = Form(...),
                                 password: str = Form(...), password2: str = Form(...),
                                 db: Session = Depends(get_db)):
@@ -69,7 +69,7 @@ async def user_password_change(request: Request, username: str = Form(...),
             user_data.hashed_password = get_password_hash(password2)
             db.add(user_data)
             db.commit()
-            msg = 'Password Updated Successfully!'
+            msg = 'Password updated'
 
     return templates.TemplateResponse('edit-user-password.html', {'request': request, 'user': user, 'msg': msg})
 
