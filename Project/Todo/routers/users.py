@@ -24,6 +24,8 @@ router = APIRouter(
 
 models.Base.metadata.create_all(bind = engine)
 
+templates - Jinja2Templates(directory = 'templates')
+
 # Dependency to get a database sessions
 def get_db():
     try:
@@ -37,6 +39,13 @@ class UserVerification(BaseModel):
     username : str
     password : str
     new_password : str
+
+
+@router.get('/edit-password', response_class= HTMLResponse)
+async def edit_user_view(request : Request):
+    user = await get_current_user(request)
+    if user is None:
+        return RedirectResponse(url='/auth', status_code=status.HTTP_302_FOUND)
 
 
 @router.get('/')
